@@ -7,18 +7,21 @@ import com.datastax.oss.driver.api.core.ProtocolVersion;
 import com.datastax.oss.driver.api.core.data.UdtValue;
 import com.datastax.oss.driver.api.core.type.DataType;
 import com.datastax.oss.driver.api.core.type.UserDefinedType;
+import com.datastax.oss.driver.api.core.type.codec.MappingCodec;
 import com.datastax.oss.driver.api.core.type.codec.TypeCodec;
 import com.datastax.oss.driver.api.core.type.reflect.GenericType;
 
-public class AuthorFormatCodec implements TypeCodec<AuthorTemp> {
+public class AuthorFormatCodec extends MappingCodec<UdtValue, AuthorTemp>
+		implements
+			TypeCodec<AuthorTemp> {
 
 	final TypeCodec<UdtValue> innerCodec;
 
 	final UserDefinedType authorTempUdt;
-
-	public AuthorFormatCodec(TypeCodec<UdtValue> innerCodec,
-			Class<AuthorTemp> javaType) {
-		this.innerCodec = innerCodec;
+	protected AuthorFormatCodec(TypeCodec<UdtValue> pInnerCodec,
+			GenericType<AuthorTemp> outerJavaType) {
+		super(pInnerCodec, outerJavaType);
+		this.innerCodec = pInnerCodec;
 		this.authorTempUdt = (UserDefinedType) innerCodec.getCqlType();
 	}
 
@@ -69,6 +72,16 @@ public class AuthorFormatCodec implements TypeCodec<AuthorTemp> {
 				? null
 				: authorTempUdt.newValue().setString("id", value.getId())
 						.setString("name", value.getName());
+	}
+
+	@Override
+	protected AuthorTemp innerToOuter(UdtValue value) {
+		return toAuthorTemp(value);
+	}
+
+	@Override
+	protected UdtValue outerToInner(AuthorTemp value) {
+		return toUDTValue(value);
 	}
 
 }

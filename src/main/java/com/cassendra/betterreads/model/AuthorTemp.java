@@ -19,9 +19,9 @@ public class AuthorTemp implements Serializable {
 	@CassandraType(type = Name.TEXT)
 	private String name;
 
-	public AuthorTemp(String pId, String pName) {
-		this.id = pId;
-		this.name = pName;
+	public AuthorTemp(String id, String name) {
+		this.id = id;
+		this.name = name;
 	}
 	public String getId() {
 		return id;

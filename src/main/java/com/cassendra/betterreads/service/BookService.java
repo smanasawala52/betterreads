@@ -7,7 +7,10 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,6 +28,7 @@ import com.cassendra.betterreads.repository.BookRepository;
 @Service
 public class BookService {
 
+	final String COVER_IMG_ROOT = "https://covers.openlibrary.org/b/id/";
 	@Autowired(required = false)
 	private AuthorRepository authorRepository;
 
@@ -94,7 +98,8 @@ public class BookService {
 							}
 						}
 						if (!authorsIds.isEmpty()) {
-							List<AuthorTemp> tempAuthors = authorsIds.stream()
+							Map<String, AuthorTemp> tempAuthors = authorsIds
+									.stream()
 									.map(x -> authorRepository.findById(x))
 									.map(optionalAuth -> {
 										if (optionalAuth.isPresent()) {
@@ -103,8 +108,11 @@ public class BookService {
 													optionalAuth.get()
 															.getName());
 										}
-										return null;
-									}).collect(Collectors.toList());
+										return new AuthorTemp("OL00000000W",
+												"Unknown Author.");
+									}).filter(x -> x != null)
+									.collect(Collectors.toMap(AuthorTemp::getId,
+											Function.identity()));
 							List<String> tempAuthorsNames = authorsIds.stream()
 									.map(x -> authorRepository.findById(x))
 									.map(optionalAuth -> {
@@ -115,6 +123,8 @@ public class BookService {
 									}).collect(Collectors.toList());
 							System.out.println("tempAuthors: " + tempAuthors);
 							if (tempAuthors != null && !tempAuthors.isEmpty()) {
+								book.setAuthors(
+										new ArrayList<>(tempAuthors.values()));
 								// book.setAuthors(tempAuthors.get(0));
 								book.setAuthorsIds(authorsIds);
 								book.setAuthorsNames(tempAuthorsNames);
@@ -133,5 +143,19 @@ public class BookService {
 			e.printStackTrace();
 		}
 
+	}
+
+	public List<Book> getBooks(String id) {
+		List<Book> temp = bookRepository
+				.findAllById(Arrays.asList(id.split(",")));
+		temp.stream().forEach(x -> {
+			if (x.getCoverIds() != null && !x.getCoverIds().isEmpty()) {
+				x.setCoverImage(
+						COVER_IMG_ROOT + x.getCoverIds().get(0) + ".jpg");
+			} else {
+				x.setCoverImage("/images/no-image.png");
+			}
+		});
+		return temp;
 	}
 }

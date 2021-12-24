@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.cassandra.CqlSessionBuilderCustomi
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
+import com.cassendra.betterreads.codec.CqlTextToAuthorCodec;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
@@ -59,7 +60,7 @@ public class BetterreadsApplication {
 			DataStaxAstraProperties astraProperties) {
 		Path bundle = astraProperties.getSecureConnectBundle().toPath();
 		return builder -> builder.withCloudSecureConnectBundle(bundle)
-				.withCodecRegistry(null)
+				.addTypeCodecs(new CqlTextToAuthorCodec())
 				.withAuthCredentials("nicBhqGuHPkdilBfMAFFvsmg",
 						"m4jEAXtvi,4Alu248yy,-BMd869dxn4qDtP_.sb-jm6.P0w7AxIYvAE7cq7c.Tbytxc,q21+-+YZ5iGkdQHE2-OF58S.hyRepvn9g0Y10r5KZTy8vQxw8bnwPZZeSkOE");
 	}

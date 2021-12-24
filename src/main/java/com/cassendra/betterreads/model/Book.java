@@ -1,6 +1,7 @@
 package com.cassendra.betterreads.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -42,8 +43,9 @@ public class Book {
 	private List<String> authorsNames;
 
 	@Column(value = "authors")
-	@CassandraType(type = Name.UDT, userTypeName = "author_temp")
-	private AuthorTemp authors;
+	private List<AuthorTemp> authors = new ArrayList<>();
+
+	private String coverImage = "";
 
 	/**
 	 * @return the id
@@ -123,7 +125,7 @@ public class Book {
 	/**
 	 * @return the authors
 	 */
-	public AuthorTemp getAuthors() {
+	public List<AuthorTemp> getAuthors() {
 		return authors;
 	}
 
@@ -131,7 +133,7 @@ public class Book {
 	 * @param authors
 	 *            the authors to set
 	 */
-	public void setAuthors(AuthorTemp authors) {
+	public void setAuthors(List<AuthorTemp> authors) {
 		this.authors = authors;
 	}
 
@@ -164,6 +166,21 @@ public class Book {
 	public void setAuthorsNames(List<String> authorsNames) {
 		this.authorsNames = authorsNames;
 	}
+	/**
+	 * @return the coverImage
+	 */
+	public String getCoverImage() {
+		return coverImage;
+	}
+
+	/**
+	 * @param coverImage
+	 *            the coverImage to set
+	 */
+	public void setCoverImage(String coverImage) {
+		this.coverImage = coverImage;
+	}
+
 	@Override
 	public String toString() {
 		return "Book: id: " + id + " name: " + name;
