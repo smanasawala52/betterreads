@@ -7,14 +7,13 @@ public class SearchResultItem {
 	private String title = "";
 	private String key = "";
 	private List<String> author_name = new ArrayList<String>();
+	private List<String> author_key = new ArrayList<String>();
+	private List<String> publish_date = new ArrayList<String>();
+
+	private String name = "";
 	private String cover_i = "";
 	// key,title,author_name,cover_i
 
-	@Override
-	public String toString() {
-		return "SearchResultItem [title=" + title + ", key=" + key
-				+ ", author_name=" + author_name + ", cover_i=" + cover_i + "]";
-	}
 	/**
 	 * @return the title
 	 */
@@ -66,6 +65,52 @@ public class SearchResultItem {
 	 */
 	public void setCover_i(String cover_i) {
 		this.cover_i = cover_i;
+	}
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	/**
+	 * @return the author_key
+	 */
+	public List<String> getAuthor_key() {
+		return author_key;
+	}
+	/**
+	 * @param author_key
+	 *            the author_key to set
+	 */
+	public void setAuthor_key(List<String> author_key) {
+		this.author_key = author_key;
+	}
+	/**
+	 * @return the publish_date
+	 */
+	public List<String> getPublish_date() {
+		return publish_date;
+	}
+	/**
+	 * @param publish_date
+	 *            the publish_date to set
+	 */
+	public void setPublish_date(List<String> publish_date) {
+		this.publish_date = publish_date;
+	}
+	@Override
+	public String toString() {
+		return "SearchResultItem [title=" + title + ", key=" + key
+				+ ", author_name=" + author_name + ", author_key=" + author_key
+				+ ", publish_date=" + publish_date + ", name=" + name
+				+ ", cover_i=" + cover_i + "]";
 	}
 
 }
