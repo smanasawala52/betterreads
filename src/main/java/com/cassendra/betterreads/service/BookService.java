@@ -180,8 +180,9 @@ public class BookService {
 								}
 								return new AuthorTemp("OL00000000W",
 										"Unknown Author.");
-							}).filter(x -> x != null).collect(Collectors.toMap(
-									AuthorTemp::getId, Function.identity()));
+							}).filter(x -> x != null)
+							.collect(Collectors.toMap(AuthorTemp::getId,
+									Function.identity(), (o1, o2) -> o2));
 					List<String> tempAuthorsNames = authorsIds.stream()
 							.map(x -> authorRepository.findById(x))
 							.map(optionalAuth -> {
