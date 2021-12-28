@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.CassandraType.Name;
@@ -45,7 +46,11 @@ public class Book {
 	@Column(value = "authors")
 	private List<AuthorTemp> authors = new ArrayList<>();
 
+	@Transient
 	private String coverImage = "";
+
+	@Transient
+	private UserBooks userBookInfo;
 
 	/**
 	 * @return the id
@@ -181,13 +186,29 @@ public class Book {
 		this.coverImage = coverImage;
 	}
 
+	/**
+	 * @return the userBookInfo
+	 */
+	public UserBooks getUserBookInfo() {
+		return userBookInfo;
+	}
+
+	/**
+	 * @param userBookInfo
+	 *            the userBookInfo to set
+	 */
+	public void setUserBookInfo(UserBooks userBookInfo) {
+		this.userBookInfo = userBookInfo;
+	}
+
 	@Override
 	public String toString() {
 		return "Book [id=" + id + ", name=" + name + ", description="
 				+ description + ", publishedDate=" + publishedDate
 				+ ", coverIds=" + coverIds + ", authorsIds=" + authorsIds
 				+ ", authorsNames=" + authorsNames + ", authors=" + authors
-				+ ", coverImage=" + coverImage + "]";
+				+ ", coverImage=" + coverImage + ", userBookInfo="
+				+ userBookInfo + "]";
 	}
 
 }

@@ -31,7 +31,14 @@
 
 
       <h1>My Books</h1>
-
+      <div class="card" th:unless="${loginId}" >
+                  <div class="card-body">
+                    <h5 class="card-title">Login to track this book</h5>
+                    <p class="card-text">Mark reading dates, completion status and star ratings</p>
+                    <a href="/oauth2/authorization/github" class="btn btn-primary">Login via GitHub</a>
+                  </div>
+                </div>
+<div class="card" th:if="${loginId}" >
       <div class="card mb-3" style="max-width: 540px;" th:each="book: ${books}">
         <div class="card mb-3">
           <div class="row g-0">
@@ -41,21 +48,25 @@
             <div class="col-md-8">
               <div class="card-body">
                 <a th:href="@{'/books/' + ${book.bookId}}"  class="card-title" th:text="${book.bookName}">Name</a>
-                <p class="card-text" th:text="${book.authorNames}">Author name</p>
-                <div th:switch="${book.readingStatus}">
-                  <p th:case="'0-reading'" class="card-text">Currently Reading</p>
-                  <p th:case="'1-finished'" class="card-text">Finished</p>
-                  <p th:case="'2-dnf'" class="card-text">Did not finish</p>
+<!--                 <div  th:each="bookAuthor: ${book.authorsNames}"> -->
+<!-- 	                <span class="card-text" th:text="${bookAuthor}">Book Author</span> -->
+<!--                 </div> -->
+               
+				<div th:switch="${book.readingStatus}">
+                  <p th:case="'0'" class="card-text">Currently Reading</p>
+                  <p th:case="'1'" class="card-text">Finished</p>
+                  <p th:case="'2'" class="card-text">Did not finish</p>
                 </div>
                 <p class="card-text">
                   <span th:each="rating: ${#numbers.sequence(0, book.rating - 1)}">
                     &#9733;
                   </span>
                 </p>
-
+                
               </div>
             </div>
           </div>
+        </div>
         </div>
 
       </div>
