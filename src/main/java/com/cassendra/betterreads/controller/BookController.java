@@ -2,6 +2,7 @@
 package com.cassendra.betterreads.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,6 +36,12 @@ public class BookController {
 			@PathVariable String id, Model model) {
 		List<Book> books = new ArrayList<>();
 		if (id != null && !id.isEmpty()) {
+			books = bookService.getBooks(id);
+		}
+		if (books == null || (books != null && !books.isEmpty())) {
+			Arrays.asList(id.split(",")).stream().forEach(x -> {
+				bookService.loadBooksOpenLibrary(id, 0, 10);
+			});
 			books = bookService.getBooks(id);
 		}
 		if (books != null && !books.isEmpty()) {
