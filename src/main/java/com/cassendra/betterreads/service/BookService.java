@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import com.cassendra.betterreads.model.Author;
 import com.cassendra.betterreads.model.AuthorTemp;
 import com.cassendra.betterreads.model.Book;
 import com.cassendra.betterreads.model.SearchResults;
@@ -38,6 +40,9 @@ public class BookService {
 	final String COVER_IMG_ROOT = "https://covers.openlibrary.org/b/id/";
 	@Autowired(required = false)
 	private AuthorRepository authorRepository;
+
+	@Autowired(required = false)
+	private AuthorService authorService;
 
 	@Autowired(required = false)
 	private BookRepository bookRepository;
@@ -171,8 +176,16 @@ public class BookService {
 				}
 				if (!authorsIds.isEmpty()) {
 					Map<String, AuthorTemp> tempAuthors = authorsIds.stream()
-							.map(x -> authorRepository.findById(x))
-							.map(optionalAuth -> {
+							.map(x -> {
+								Optional<Author> temp = authorRepository
+										.findById(x);
+								if (!temp.isPresent()) {
+									authorService.loadAuthorsOpenLibrary(x, 0,
+											10);
+									temp = authorRepository.findById(x);
+								}
+								return temp;
+							}).map(optionalAuth -> {
 								if (optionalAuth.isPresent()) {
 									return new AuthorTemp(
 											optionalAuth.get().getId(),
