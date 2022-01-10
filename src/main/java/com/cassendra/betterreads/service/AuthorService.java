@@ -75,6 +75,20 @@ public class AuthorService {
 		}
 	}
 
+	public void loadAuthorsOpenLibraryOneAuthor(String query) {
+		if (query != null && !query.isEmpty()) {
+			String temp = "/authors/" + query + ".json";
+			String responseJson = webClientAuthorDetails.get().uri(temp)
+					.exchange().block().bodyToMono(String.class).block();
+			Author author = getAuthor(responseJson);
+			if (author != null && author.getName() != null
+					&& !author.getName().isEmpty()) {
+				authorRepository.save(author);
+			}
+
+		}
+	}
+	
 	public void loadAuthors() {
 		System.out.println("Reached here!");
 
