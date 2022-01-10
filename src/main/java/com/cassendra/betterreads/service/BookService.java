@@ -180,8 +180,7 @@ public class BookService {
 								Optional<Author> temp = authorRepository
 										.findById(x);
 								if (!temp.isPresent()) {
-									authorService.loadAuthorsOpenLibrary(x, 0,
-											10);
+									authorService.loadAuthorsOpenLibraryOneAuthor(x);
 									temp = authorRepository.findById(x);
 								}
 								return temp;
