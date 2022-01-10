@@ -38,7 +38,7 @@ public class BookController {
 		if (id != null && !id.isEmpty()) {
 			books = bookService.getBooks(id);
 		}
-		if (books == null || (books != null && !books.isEmpty())) {
+		if (books == null || (books != null && books.isEmpty())) {
 			Arrays.asList(id.split(",")).stream().forEach(x -> {
 				bookService.loadBooksOpenLibrary(id, 0, 10);
 			});
